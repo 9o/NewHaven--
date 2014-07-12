@@ -13,8 +13,7 @@ function MainController($scope, $compile, $firebase) {
 	
 	new FirebaseSimpleLogin(fb, function(error, user) {
 		scope.$apply(function() {
-			if(user)
-				scope.user = user;	
+			if(user) scope.user = user;	
 		});
 	});
 	
@@ -51,6 +50,13 @@ function MainController($scope, $compile, $firebase) {
 			rememberMe: true,
 			scope: 'user_events'
 		});
+		
+	}
+	
+	scope.removeEvent = function(id) {
+		console.log("asd");
+		delete scope.markers[id];
+		console.log(markers, id);
 		
 	}
 }
@@ -194,6 +200,8 @@ function initialize() {
 				
 				});
 			});
+			
+			markers[id] = marker;
 
 			
 		});

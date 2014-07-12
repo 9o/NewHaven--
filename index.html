@@ -16,6 +16,7 @@
 				<li><input type="text" placeholder="Time" ng-model="markers['%id%'].time"></li>
 				<li><textarea type="text" placeholder="Description" ng-model="markers['%id%'].description"></textarea></li>
 			</ul>
+			<div class="btn btn-default btn-xs" ng-click="removeEvent('%id%')">Remove Event</div>
 		</div>
 	</script>
 	<script id="markerShow" type="template">
