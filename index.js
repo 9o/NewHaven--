@@ -74,8 +74,13 @@ function initialize() {
 	});
 
 	function getRandomNeighbors(latlng) {
-        console.log(latlng);
+        // console.log(latlng);
         codeLatLng(latlng);
+        for (var i=0;i<4;i++){
+        	latlng.B += .0001;
+	        latlng.k += .0001;
+	        codeLatLng(latlng);
+        }
 	}
 
 	function codeLatLng(latlng) {
