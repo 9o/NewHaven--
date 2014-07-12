@@ -14,11 +14,24 @@
     <script type="text/javascript">
       function initialize() {
 		  
-		var markers,
+		var markers = [],
 			fb = new Firebase("https://newhavenhack.firebaseio.com/markers");
 		
 		fb.on("child_added", function(snapshot) {
+			console.log("added");
 			placeMarker(snapshot.name(), snapshot.val());
+		});
+		
+		fb.on("child_changed", function(snapshot) {
+			console.log("change", snapshot.name(), snapshot.val());
+			placeMarker(snapshot.name(), snapshot.val());
+		});
+		
+		fb.on("child_removed", function(snapshot) {
+			console.log("removed");
+			var id = snapshot.name();
+			if(markers[id])
+				markers[id].setMap(null);
 		});
 		  
 		  
@@ -48,10 +61,10 @@
           // icon: 'http://nwex.co.uk/images/smilies/turd.gif'//icons.info.icon
         });
 
-        var contentString = '<input type="text" placeholder="Title">'+
-          '<br><input type="text" placeholder="Time">'+
-          '<br><textarea type="text" placeholder="Description"></textarea>'+
-          '<br><input type="submit">';
+        var contentString = '<div uid="%MARKER_ID%"><input type="text" placeholder="Title" autofocus name="title">'+
+          '<br><input type="text" placeholder="Time" name="time">'+
+          '<br><textarea type="text" placeholder="Description" name="description"></textarea>'+
+          '<br><input type="submit" onclick="updateMarker(\'%MARKER_ID%\')"></div>';
           // '<div id="siteNotice">'+
           // '</div>'+
           // ''
@@ -73,40 +86,72 @@
           // '</div>'+
           // '</div>';
 
-
-        var infowindow = new google.maps.InfoWindow({
-          content: contentString
-        });
-
         google.maps.event.addListener(map, 'click', function(event) {
-    			fb.push({lat: event.latLng.lat(), lng: event.latLng.lng()});
-    			console.log(event);
+			fb.push({lat: event.latLng.lat(), lng: event.latLng.lng()});
         });
-
-        google.maps.event.addListener(marker, 'click', function() {
-          infowindow.open(map,marker);
-        });
+		
+		window.updateMarker = function(id) {
+			
+			fb.child(id).update({
+				title: document.querySelector("[uid="+id+"] [name=title]").value,
+				description: document.querySelector("[uid="+id+"] [name=description]").value,
+				time: document.querySelector("[uid="+id+"] [name=time]").value
+			});
+		};
 
         function placeMarker(id, location) {
-            var marker = new google.maps.Marker({
-                position: new google.maps.LatLng(location.lat, location.lng), 
-                map: map,
-                icon: 'http://nwex.co.uk/images/smilies/turd.gif'
-            });
+
+			console.log(id);
 			
-			markers[id] = marker;
+			if(markers[id]) {
+				markers[id].setMap(null);
+				delete markers[id];
+			}
+			
+			setTimeout(function() {
+				
+			
+	            var marker = new google.maps.Marker({
+	                position: new google.maps.LatLng(location.lat, location.lng), 
+	                map: map,
+	                icon: 'http://nwex.co.uk/images/smilies/turd.gif'
+	            });
+			
+
+		        google.maps.event.addListener(marker, 'click', function() {
+			        var infowindow = new google.maps.InfoWindow({
+						content: contentString.replace(/%MARKER_ID%/gi, id)
+			        });
+				
+					infowindow.open(map,marker);
+				
+					setTimeout(function() {
+						console.log(location);
+						document.querySelector("[uid="+id+"] [name=title]").value = location.title || "";
+						document.querySelector("[uid="+id+"] [name=description]").value = location.description || "";
+						document.querySelector("[uid="+id+"] [name=time]").value = location.time || "";
+					
+					}, 50);
+				
+					// console.log(infowindow.getContent());
+		        });
+			
+				markers[id] = marker;
+				
+				
+			}, 100);
         }
 
       }
 
 
-      function addMarker(feature) {
-        var marker = new google.maps.Marker({
-          position: feature.position,
-          icon: icons[feature.type].icon,
-          map: map
-        });
-      }
+      // function addMarker(feature) {
+      //   var marker = new google.maps.Marker({
+      //     position: feature.position,
+      //     icon: icons[feature.type].icon,
+      //     map: map
+      //   });
+      // }
 
       google.maps.event.addDomListener(window, 'load', initialize);
     </script>
