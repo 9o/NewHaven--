@@ -4,6 +4,7 @@ var map,
 	fb = new Firebase("https://newhavenhack.firebaseio.com/markers"),
 	scope, compile, firebase;
 
+
 function MainController($scope, $compile, $firebase) {
 	scope = $scope;
 	compile = $compile;
@@ -28,6 +29,28 @@ function MainController($scope, $compile, $firebase) {
 	        alert("Geocode was not successful for the following reason: " + status);
 	      }
 	    });
+	}
+	
+	scope.facebookLogin = function() {
+		var auth = new FirebaseSimpleLogin(fb, function(error, user) {
+			
+			scope.$apply(function() {
+				
+			
+				if(user)
+					scope.facebookUser = user;	
+				
+				console.log(scope.facebookUser);
+				
+			});
+			
+		});
+
+		auth.login('facebook', {
+			rememberMe: true,
+			scope: 'user_events'
+		});
+		
 	}
 }
 
@@ -70,7 +93,15 @@ function initialize() {
 	};
 
 	google.maps.event.addListener(map, 'click', function(event) {
-		fb.push({lat: event.latLng.lat(), lng: event.latLng.lng()});
+		new FirebaseSimpleLogin(fb, function(error, facebookUser) {
+			
+			if(facebookUser)
+				fb.push({lat: event.latLng.lat(), lng: event.latLng.lng(), facebookUser: facebookUser});
+			else
+				alert("Please click Login with Facebook before creating an event");
+			
+		});
+		
 	});
 
 	function getRandomNeighbors(latlng) {

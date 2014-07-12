@@ -57,6 +57,11 @@
             </div>
             <button type="submit" class="btn btn-primary" >Submit</button>
           </form>
+		  <button class="btn btn-success" ng-click="facebookLogin()" ng-show="!facebookUser">Facebook Login</button> 
+		  <div ng-show="facebookUser">
+			  <h1>{{facebookUser.thirdPartyUserData.name}}</h1>
+			  <img src="{{facebookUser.thirdPartyUserData.picture.data.url}}" ng-show="facebookUser.thirdPartyUserData.picture.data.url">
+		  </div>
           <!-- <ul class="nav navbar-nav navbar-right">
             <li><a href="#">Link</a></li>
             <li class="dropdown">
