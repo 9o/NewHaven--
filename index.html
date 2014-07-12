@@ -10,8 +10,18 @@
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD65I5EEVXQSoEvAWvvBlHG8rtt2nD9eD4">
     </script>
+	  <script type="" src="https://cdn.firebase.com/js/client/1.0.17/firebase.js"></script>
     <script type="text/javascript">
       function initialize() {
+		  
+		var markers,
+			fb = new Firebase("https://newhavenhack.firebaseio.com/markers");
+		
+		fb.on("child_added", function(snapshot) {
+			placeMarker(snapshot.name(), snapshot.val());
+		});
+		  
+		  
         var myLatLng = new google.maps.LatLng(41.3127341,-72.92376569999999);
 
         var mapOptions = {
@@ -39,16 +49,21 @@
         });
 
         google.maps.event.addListener(map, 'click', function(event) {
-           placeMarker(event.latLng);
+			fb.push({lat: event.latLng.lat(), lng: event.latLng.lng()});
+			// placeMarker(event.latLng);
         });
 
-        function placeMarker(location) {
+        function placeMarker(id, location) {
             var marker = new google.maps.Marker({
-                position: location, 
+                position: new google.maps.LatLng(location.lat, location.lng), 
                 map: map,
                 icon: 'http://nwex.co.uk/images/smilies/turd.gif'
             });
+			
+			markers[id] = marker;
         }
+		
+		
 
 
       }
