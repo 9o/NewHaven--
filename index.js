@@ -5,10 +5,11 @@ var map,
 	scope, compile, firebase;
 
 function MainController($scope, $compile, $firebase) {
-	console.log(arguments);
 	scope = $scope;
 	compile = $compile;
 	firebase = $firebase;
+	
+	$firebase(fb).$bind(scope, "markers");
 }
 
 
@@ -111,19 +112,16 @@ function initialize() {
 		google.maps.event.addListener(marker, 'click', function() {
 			
 			scope.$apply(function() {
-				
-				firebase(fb.child(id)).$bind(scope, "user");
-
-				var element = compile(document.getElementById("markerEdit").innerHTML)(scope)[0];
-
-				console.log(document.getElementById("markerEdit").innerHTML, element[0]);
-				
+				var element = compile(document.getElementById("markerEdit").innerHTML.replace(/%id%/gi, id))(scope)[0];
+		
 				var infowindow = new google.maps.InfoWindow();
 				infowindow.setContent(element);
 
 				infowindow.open(map,marker);
 				
+				
 			});
+
 			
 		});
 	}

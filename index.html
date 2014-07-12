@@ -10,9 +10,9 @@
 	<script id="markerEdit" type="template">
 		<div id="editMarker">
 			<ul>
-				<li><input type="text" placeholder="Title" autofocus ng-model="user.title"></li>
-				<li><input type="text" placeholder="Time" ng-model="user.time"></li>
-				<li><textarea type="text" placeholder="Description" ng-model="user.description"></textarea></li>
+				<li><input type="text" placeholder="Title" autofocus ng-model="markers['%id%'].title"></li>
+				<li><input type="text" placeholder="Time" ng-model="markers['%id%'].time"></li>
+				<li><textarea type="text" placeholder="Description" ng-model="markers['%id%'].description"></textarea></li>
 			</ul>
 		</div>
 	</script>
