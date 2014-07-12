@@ -102,7 +102,7 @@ function initialize() {
 	google.maps.event.addListener(map, 'click', function(event) {
 		new FirebaseSimpleLogin(fb, function(error, user) {
 			
-			if(user) {
+			if(scope.user) {
 				fb.push({lat: event.latLng.lat(), lng: event.latLng.lng(), user: user});
 			} else {
 				alert("Please click Login with Facebook before creating an event");
@@ -163,8 +163,6 @@ function initialize() {
 			
 			new FirebaseSimpleLogin(fb, function(error, user) {
 				scope.$apply(function() {
-					
-					console.log(scope.user, user);
 					
 					if(scope.markers[id] && user && user.id == scope.markers[id].user.id) {
 					

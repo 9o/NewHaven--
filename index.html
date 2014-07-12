@@ -21,9 +21,13 @@
 	</script>
 	<script id="markerShow" type="template">
 		<div class="showMarker">
-			<h1 style="margin:0"> {{markers['%id%'].title}} </h1>
+			<h1> {{markers['%id%'].title ? markers['%id%'].title : markers['%id%'].user.thirdPartyUserData.name + "'s Event" }} </h1>
 			<h2> {{markers['%id%'].time}} </h2>
 			<h3> {{markers['%id%'].description}} </h3>
+			<p>
+			  <img src="{{user.thirdPartyUserData.picture.data.url}}" ng-show="user.thirdPartyUserData.picture.data.url">
+			  <h4>{{user.thirdPartyUserData.name}}</h4>
+			</p>
 		</div>
 	</script>
   </head>
@@ -63,9 +67,9 @@
             <div class="form-group">
               <input type="text" class="form-control" placeholder="Where is your event?" ng-model="search">
             </div>
-            <button type="submit" class="btn btn-primary" >Submit</button>
+            <button type="submit" class="btn btn-primary">Search</button>
           </form>
-		  <button class="btn btn-success" ng-click="facebookLogin()" ng-show="!user">Facebook Login</button> 
+		  <button class="btn btn-success" ng-click="facebookLogin()" ng-show="!user">Facebook Signin</button> 
 		  <div ng-show="user" class="user">
 			  <img src="{{user.thirdPartyUserData.picture.data.url}}" ng-show="user.thirdPartyUserData.picture.data.url">
 			  <h4>{{user.thirdPartyUserData.name}}</h4>
