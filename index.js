@@ -49,31 +49,6 @@ function initialize() {
 		}
 	};
 
-	// var contentString = '<div uid="%MARKER_ID%"><input type="text" placeholder="Title" autofocus name="title">'+
-	// 	'<br><input type="text" placeholder="Time" name="time">'+
-	// 	'<br><textarea type="text" placeholder="Description" name="description"></textarea>'+
-	// 	'<br><input type="submit" onclick="updateMarker(\'%MARKER_ID%\')"></div>';
-	// '<div id="siteNotice">'+
-	// '</div>'+
-	// ''
-	// '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
-	// '<div id="bodyContent">'+
-	// '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-	// 'sandstone rock formation in the southern part of the '+
-	// 'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-	// 'south west of the nearest large town, Alice Springs; 450&#160;km '+
-	// '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
-	// 'features of the Uluru - Kata Tjuta National Park. Uluru is '+
-	// 'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-	// 'Aboriginal people of the area. It has many springs, waterholes, '+
-	// 'rock caves and ancient paintings. Uluru is listed as a World '+
-	// 'Heritage Site.</p>'+
-	// '<p>Attribution: Uluru, <a href="http://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
-	// 'http://en.wikipedia.org/w/index.php?title=Uluru</a> '+
-	// '(last visited June 22, 2009).</p>'+
-	// '</div>'+
-	// '</div>';
-
 	google.maps.event.addListener(map, 'click', function(event) {
 	fb.push({lat: event.latLng.lat(), lng: event.latLng.lng()});
 	});
@@ -86,6 +61,37 @@ function initialize() {
 			time: document.querySelector("[uid="+id+"] [name=time]").value
 		});
 	};
+
+	function getRandomNeighbors(latlng) {
+        
+        codeLatLng(latlng);
+	}
+
+	function codeLatLng(latlng) {
+	// var input = document.getElementById("latlng").value;
+	// var latlngStr = input.split(",",2);
+	// var lat = parseFloat(latlngStr[0]);
+	// var lng = parseFloat(latlngStr[1]);
+	// var latlng = new google.maps.LatLng(lat, lng);
+
+		geocoder.geocode({'latLng': latlng}, function(results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				console.log(results[0].formatted_address);
+				// if (results[1]) {
+				//   map.setZoom(11);
+				//   marker = new google.maps.Marker({
+				//       position: latlng,
+				//       map: map
+				//   });
+				//   infowindow.setContent(results[1].formatted_address);
+				//   infowindow.open(map, marker);
+				// }
+			} else {
+				console.log("Geocoder failed due to: " + status);
+			}
+		});
+	}
+
 
 	function placeMarker(id, location) {
 
