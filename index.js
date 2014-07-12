@@ -70,17 +70,8 @@ function initialize() {
 	};
 
 	google.maps.event.addListener(map, 'click', function(event) {
-	fb.push({lat: event.latLng.lat(), lng: event.latLng.lng()});
+		fb.push({lat: event.latLng.lat(), lng: event.latLng.lng()});
 	});
-
-	window.updateMarker = function(id) {
-
-		fb.child(id).update({
-			title: document.querySelector("[uid="+id+"] [name=title]").value,
-			description: document.querySelector("[uid="+id+"] [name=description]").value,
-			time: document.querySelector("[uid="+id+"] [name=time]").value
-		});
-	};
 
 	function getRandomNeighbors(latlng) {
         

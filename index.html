@@ -51,11 +51,11 @@
               </ul>
             </li> -->
           </ul>
-          <form class="navbar-form navbar-right" role="search">
+          <form class="navbar-form navbar-right" role="search" ng-submit="searchLocation()">
             <div class="form-group">
               <input type="text" class="form-control" placeholder="Where is your event?" ng-model="search">
             </div>
-            <button type="submit" class="btn btn-primary" ng-click="placeMarker()">Submit</button>
+            <button type="submit" class="btn btn-primary" >Submit</button>
           </form>
           <!-- <ul class="nav navbar-nav navbar-right">
             <li><a href="#">Link</a></li>
