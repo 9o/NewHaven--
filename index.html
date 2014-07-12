@@ -7,8 +7,9 @@
       body { height: 100%; margin: 0; padding: 0 }
       #map-canvas { height: 100% }
     </style>
+	<link rel="stylesheet" type="text/css" href="/style.css">
 	<script id="markerEdit" type="template">
-		<div id="editMarker">
+		<div class="editMarker">
 			<ul>
 				<li><input type="text" placeholder="Title" autofocus ng-model="markers['%id%'].title"></li>
 				<li><input type="text" placeholder="Time" ng-model="markers['%id%'].time"></li>
