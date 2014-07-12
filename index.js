@@ -1,7 +1,15 @@
   
 var map,
 	markers = [],
-	fb = new Firebase("https://newhavenhack.firebaseio.com/markers");
+	fb = new Firebase("https://newhavenhack.firebaseio.com/markers"),
+	scope, compile, firebase;
+
+function MainController($scope, $compile, $firebase) {
+	console.log(arguments);
+	scope = $scope;
+	compile = $compile;
+	firebase = $firebase;
+}
 
 
 function initialize() {
@@ -41,10 +49,10 @@ function initialize() {
 		}
 	};
 
-	var contentString = '<div uid="%MARKER_ID%"><input type="text" placeholder="Title" autofocus name="title">'+
-		'<br><input type="text" placeholder="Time" name="time">'+
-		'<br><textarea type="text" placeholder="Description" name="description"></textarea>'+
-		'<br><input type="submit" onclick="updateMarker(\'%MARKER_ID%\')"></div>';
+	// var contentString = '<div uid="%MARKER_ID%"><input type="text" placeholder="Title" autofocus name="title">'+
+	// 	'<br><input type="text" placeholder="Time" name="time">'+
+	// 	'<br><textarea type="text" placeholder="Description" name="description"></textarea>'+
+	// 	'<br><input type="submit" onclick="updateMarker(\'%MARKER_ID%\')"></div>';
 	// '<div id="siteNotice">'+
 	// '</div>'+
 	// ''
@@ -81,14 +89,10 @@ function initialize() {
 
 	function placeMarker(id, location) {
 
-		console.log(id);
-
 		if(markers[id]) {
-		markers[id].setMap(null);
-		delete markers[id];
+			markers[id].setMap(null);
+			delete markers[id];
 		}
-
-		setTimeout(function() {
 
 
 		var marker = new google.maps.Marker({
@@ -99,45 +103,45 @@ function initialize() {
 
 
 		google.maps.event.addListener(marker, 'click', function() {
-			var infowindow = new google.maps.InfoWindow({
-				content: contentString.replace(/%MARKER_ID%/gi, id)
+			
+			scope.$apply(function() {
+				
+				firebase(fb.child(id)).$bind(scope, "user");
+
+				var element = compile(document.getElementById("markerEdit").innerHTML)(scope)[0];
+
+				console.log(document.getElementById("markerEdit").innerHTML, element[0]);
+				
+				var infowindow = new google.maps.InfoWindow();
+				infowindow.setContent(element);
+
+				infowindow.open(map,marker);
+				
 			});
+			
+		});
+	}
 
-			infowindow.open(map,marker);
-
-			setTimeout(function() {
-				console.log(location);
-				document.querySelector("[uid="+id+"] [name=title]").value = location.title || "";
-				document.querySelector("[uid="+id+"] [name=description]").value = location.description || "";
-				document.querySelector("[uid="+id+"] [name=time]").value = location.time || "";
-
-				}, 50);
-
-				// console.log(infowindow.getContent());
-				});
-
-				markers[id] = marker;
-
-
-			}, 100);
-		}
+	//handleNoGeolocation();
 	
-		//handleNoGeolocation();
-		
-		if(navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function(position) {
-				var pos = new google.maps.LatLng(position.coords.latitude,
-				                         position.coords.longitude);
+	if(navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			var pos = new google.maps.LatLng(position.coords.latitude,
+			                         position.coords.longitude);
 
-				// var infowindow = new google.maps.InfoWindow({
-				// 	map: map,
-				// 	position: pos,
-				// 	content: 'Location found using HTML5.'
-				// });
+			// var infowindow = new google.maps.InfoWindow({
+			// 	map: map,
+			// 	position: pos,
+			// 	content: 'Location found using HTML5.'
+			// });
 
-				map.setCenter(pos);
-			});
-		}
+			map.setCenter(pos);
+		});
+	}
+	
+	angular.module("map", ['firebase'])
+	
+	angular.bootstrap(document, ['map']);
 
 }
 

@@ -7,11 +7,24 @@
       body { height: 100%; margin: 0; padding: 0 }
       #map-canvas { height: 100% }
     </style>
+	<script id="markerEdit" type="template">
+		<div id="editMarker">
+			<ul>
+				<li><input type="text" placeholder="Title" autofocus ng-model="user.title"></li>
+				<li><input type="text" placeholder="Time" ng-model="user.time"></li>
+				<li><textarea type="text" placeholder="Description" ng-model="user.description"></textarea></li>
+			</ul>
+		</div>
+	</script>
   </head>
-  <body>
+  <body ng-controller="MainController">
     <div id="map-canvas"/>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD65I5EEVXQSoEvAWvvBlHG8rtt2nD9eD4"></script>
 	<script type="text/javascript" src="https://cdn.firebase.com/js/client/1.0.17/firebase.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular.min.js"></script>
+	<script src="//cdn.firebase.com/libs/angularfire/0.7.1/angularfire.min.js"></script>
 	<script type="text/javascript" src="/index.js"></script>
+
   </body>
 </html>
