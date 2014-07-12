@@ -11,6 +11,13 @@ function MainController($scope, $compile, $firebase) {
 	firebase = $firebase;
 	geocoder = new google.maps.Geocoder();
 	
+	new FirebaseSimpleLogin(fb, function(error, user) {
+		scope.$apply(function() {
+			if(user)
+				scope.facebookUser = user;	
+		});
+	});
+	
 	$firebase(fb).$bind(scope, "markers");
 
 	scope.searchLocation = function () {
@@ -33,17 +40,11 @@ function MainController($scope, $compile, $firebase) {
 	
 	scope.facebookLogin = function() {
 		var auth = new FirebaseSimpleLogin(fb, function(error, user) {
-			
 			scope.$apply(function() {
-				
-			
 				if(user)
 					scope.facebookUser = user;	
 				
-				console.log(scope.facebookUser);
-				
 			});
-			
 		});
 
 		auth.login('facebook', {
