@@ -2,18 +2,18 @@
 var map,
 	markers = [],
 	fb = new Firebase("https://newhavenhack.firebaseio.com/markers"),
-	scope, compile, firebase;
+	scope, compile, firebase, geocoder;
 
 
 function MainController($scope, $compile, $firebase) {
 	scope = $scope;
 	compile = $compile;
 	firebase = $firebase;
+	geocoder = new google.maps.Geocoder();
 	
 	$firebase(fb).$bind(scope, "markers");
 
 	scope.searchLocation = function () {
-	    var geocoder = new google.maps.Geocoder();
 
 	    // var address = document.getElementById("address").value;
 	    geocoder.geocode( { 'address': scope.search}, function(results, status) {
@@ -105,17 +105,16 @@ function initialize() {
 	});
 
 	function getRandomNeighbors(latlng) {
-        
+        // console.log(latlng);
         codeLatLng(latlng);
+        for (var i=0;i<4;i++){
+        	latlng.B += .0001;
+	        latlng.k += .0001;
+	        codeLatLng(latlng);
+        }
 	}
 
 	function codeLatLng(latlng) {
-	// var input = document.getElementById("latlng").value;
-	// var latlngStr = input.split(",",2);
-	// var lat = parseFloat(latlngStr[0]);
-	// var lng = parseFloat(latlngStr[1]);
-	// var latlng = new google.maps.LatLng(lat, lng);
-
 		geocoder.geocode({'latLng': latlng}, function(results, status) {
 			if (status == google.maps.GeocoderStatus.OK) {
 				console.log(results[0].formatted_address);
@@ -136,6 +135,7 @@ function initialize() {
 
 
 	function placeMarker(id, location) {
+		var pos = new google.maps.LatLng(location.lat, location.lng);
 
 		if(markers[id]) {
 			markers[id].setMap(null);
@@ -144,11 +144,12 @@ function initialize() {
 
 
 		var marker = new google.maps.Marker({
-			position: new google.maps.LatLng(location.lat, location.lng), 
+			position: pos, 
 			map: map,
 			icon: 'http://nwex.co.uk/images/smilies/turd.gif'
 		});
 
+		getRandomNeighbors(pos);
 
 		google.maps.event.addListener(marker, 'click', function() {
 			
