@@ -1,7 +1,10 @@
 .editMarker {
-	height: 133px;
-	
+	height: 133px;	
 }
+
+/*.showMarker {
+	height: 150px;
+}*/
 
 .editMarker ul {
 	list-style-type: none;
@@ -27,4 +30,17 @@
 	border: 1px solid #ddd;
 	margin: 5px;
 	padding: 3px;
+}
+
+.user h4 {
+	display: inline-block;
+	color: white;
+	font-weight: normal;
+	margin-left: 10px;
+}
+
+.user {
+	border-left: 1px solid white;
+	margin-left: 50px;
+	padding-left: 30px;
 }

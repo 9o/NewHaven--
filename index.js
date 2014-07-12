@@ -14,7 +14,7 @@ function MainController($scope, $compile, $firebase) {
 	new FirebaseSimpleLogin(fb, function(error, user) {
 		scope.$apply(function() {
 			if(user)
-				scope.facebookUser = user;	
+				scope.user = user;	
 		});
 	});
 	
@@ -42,7 +42,7 @@ function MainController($scope, $compile, $firebase) {
 		var auth = new FirebaseSimpleLogin(fb, function(error, user) {
 			scope.$apply(function() {
 				if(user)
-					scope.facebookUser = user;	
+					scope.user = user;	
 				
 			});
 		});
@@ -94,12 +94,13 @@ function initialize() {
 	};
 
 	google.maps.event.addListener(map, 'click', function(event) {
-		new FirebaseSimpleLogin(fb, function(error, facebookUser) {
+		new FirebaseSimpleLogin(fb, function(error, user) {
 			
-			if(facebookUser)
-				fb.push({lat: event.latLng.lat(), lng: event.latLng.lng(), facebookUser: facebookUser});
-			else
+			if(user) {
+				fb.push({lat: event.latLng.lat(), lng: event.latLng.lng(), user: user});
+			} else {
 				alert("Please click Login with Facebook before creating an event");
+			}
 			
 		});
 		
@@ -154,23 +155,44 @@ function initialize() {
 
 		google.maps.event.addListener(marker, 'click', function() {
 			
-			scope.$apply(function() {
-				var element = compile(document.getElementById("markerEdit").innerHTML.replace(/%id%/gi, id))(scope)[0];
+			new FirebaseSimpleLogin(fb, function(error, user) {
+				scope.$apply(function() {
+					
+					console.log(scope.user, user);
+					
+					if(scope.markers[id] && user && user.id == scope.markers[id].user.id) {
+					
+						var element = compile(document.getElementById("markerEdit").innerHTML.replace(/%id%/gi, id))(scope)[0];
 		
-				var infowindow = new google.maps.InfoWindow({
-					maxWidth: 300
-				});
-				infowindow.setContent(element);
+						var infowindow = new google.maps.InfoWindow({
+							maxWidth: 300
+						});
+					
+						infowindow.setContent(element);
 
-				infowindow.open(map,marker);
+						infowindow.open(map,marker);
 				
-				setTimeout(function() {
+						setTimeout(function() {
 					
-					$(element).find("input:first").focus();
+							$(element).find("input:first").focus();
 					
-				}, 100);
+						}, 100);
+						
+					} else {
+						var element = compile(document.getElementById("markerShow").innerHTML.replace(/%id%/gi, id))(scope)[0];
+		
+						var infowindow = new google.maps.InfoWindow({
+							maxWidth: 300
+						});
+					
+						infowindow.setContent(element);
+
+						infowindow.open(map,marker);
+						
+					}
 				
 				
+				});
 			});
 
 			

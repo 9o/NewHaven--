@@ -18,6 +18,13 @@
 			</ul>
 		</div>
 	</script>
+	<script id="markerShow" type="template">
+		<div class="showMarker">
+			<h1> {{markers['%id%'].title}} </h1>
+			<h2> {{markers['%id%'].time}} </h2>
+			<h3> {{markers['%id%'].description}} </h3>
+		</div>
+	</script>
   </head>
   <body ng-controller="MainController">
     <nav class="navbar navbar-inverse" role="navigation" style="border-radius:0;margin-bottom:0">
@@ -57,10 +64,11 @@
             </div>
             <button type="submit" class="btn btn-primary" >Submit</button>
           </form>
-		  <button class="btn btn-success" ng-click="facebookLogin()" ng-show="!facebookUser">Facebook Login</button> 
-		  <div ng-show="facebookUser">
-			  <h1>{{facebookUser.thirdPartyUserData.name}}</h1>
-			  <img src="{{facebookUser.thirdPartyUserData.picture.data.url}}" ng-show="facebookUser.thirdPartyUserData.picture.data.url">
+		  <button class="btn btn-success" ng-click="facebookLogin()" ng-show="!user">Facebook Login</button> 
+		  <div ng-show="user" class="user">
+			  <img src="{{user.thirdPartyUserData.picture.data.url}}" ng-show="user.thirdPartyUserData.picture.data.url">
+			  <h4>{{user.thirdPartyUserData.name}}</h4>
+
 		  </div>
           <!-- <ul class="nav navbar-nav navbar-right">
             <li><a href="#">Link</a></li>
