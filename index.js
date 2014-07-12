@@ -11,18 +11,19 @@ function MainController($scope, $compile, $firebase) {
 	
 	$firebase(fb).$bind(scope, "markers");
 
-	scope.placeMarker = function () {
-		console.log(scope.search);
+	scope.searchLocation = function () {
 	    var geocoder = new google.maps.Geocoder();
 
 	    // var address = document.getElementById("address").value;
 	    geocoder.geocode( { 'address': scope.search}, function(results, status) {
 	      if (status == google.maps.GeocoderStatus.OK) {
-	        map.setCenter(results[0].geometry.location);
-	        var marker = new google.maps.Marker({
-	            map: map,
-	            position: results[0].geometry.location
-	        });
+			var resultBounds = new google.maps.LatLngBounds(
+
+			    results[0].geometry.viewport.getSouthWest(), 
+			    results[0].geometry.viewport.getNorthEast()
+			);
+
+			map.fitBounds(resultBounds);
 	      } else {
 	        alert("Geocode was not successful for the following reason: " + status);
 	      }
