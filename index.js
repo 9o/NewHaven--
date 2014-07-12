@@ -132,10 +132,18 @@ function initialize() {
 			scope.$apply(function() {
 				var element = compile(document.getElementById("markerEdit").innerHTML.replace(/%id%/gi, id))(scope)[0];
 		
-				var infowindow = new google.maps.InfoWindow();
+				var infowindow = new google.maps.InfoWindow({
+					maxWidth: 300
+				});
 				infowindow.setContent(element);
 
 				infowindow.open(map,marker);
+				
+				setTimeout(function() {
+					
+					$(element).find("input:first").focus();
+					
+				}, 100);
 				
 				
 			});

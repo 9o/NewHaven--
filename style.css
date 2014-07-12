@@ -1,6 +1,26 @@
+.editMarker {
+	height: 128px;
+	
+}
+
 .editMarker ul {
 	list-style-type: none;
 	padding: 0px;
 	margin: 0px;
 	
+}
+
+.editMarker textarea {
+	width: 218px;
+	height: 42px;
+	resize: none;
+	
+}
+
+.editMarker textarea, .editMarker input, .editMarker select {
+	width: 218px;
+	border-radius: 2px;
+	border: 1px solid #ddd;
+	margin: 5px;
+	padding: 3px;
 }
